@@ -1,7 +1,36 @@
 library(httr)
 library(jsonlite)
+library("rjson")
+library(RJSONIO)
 
 options(warn=-1)
+
+#Pobiera tablice losowych liczb do testu
+getRandom <- function (min, max, count) {
+  result <- numeric()
+  while(length(result) != count) {
+    x <- c("https://qrng.anu.edu.au/API/jsonI.php?length=",255,"&type=uint8")
+    x <- paste(x, collapse = "")
+    res <- fromJSON(x)
+    arr <- res[['data']]
+    arr <- append(arr, result)
+    arr <- arr[!duplicated(arr)]
+    temp <- numeric()
+    for (i in arr) {
+      if (i >= min && i <= max) {
+        temp <- append(temp, i)
+      }
+      if (length(temp) == count) {
+        break
+      }
+    }
+    result <- temp
+  }
+  return(result)
+}
+
+getRandom(0, 36, 30)
+
 euroRoulette <- function(budget, numSpins, number, bet) {
   startedBudget <- budget
   wins <- 0
@@ -20,12 +49,9 @@ euroRoulette <- function(budget, numSpins, number, bet) {
   cat(sprintf("wygrana wynosi %i \n", budget - startedBudget))
   cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
-res <- GET("http://www.randomnumberapi.com/api/v1.0/random", query = list(min = 0, max = 36, count = 30))
-data <- fromJSON(rawToChar(res$content))
-print(data)
-print(sample(0:36,30))
+
 euroRoulette(1000000,1000000, sample(0:36,1), 1)
-#dbinom(0,30,1/37)
+euroRoulette(1000000,1000000, getRandom(0, 36,1), 1)
 
 lotto <- function(numSpins, numbers) {
   wins <- 0
@@ -42,15 +68,6 @@ lotto <- function(numSpins, numbers) {
     if (counter == 6) {
       wins <- wins + 1
     }
-    #cat(sprintf('Wygrane liczby: '))
-    #for (i in outcome) {
-    #  cat(sprintf('%i ', i))
-    #}
-    #cat(sprintf(' | -> '))
-    #for (i in numbers) {
-    #  cat(sprintf('%i ', i))
-    #}
-    #cat(sprintf('\n '))
   }
 
   cat(sprintf('Losowane liczby: '))
@@ -61,7 +78,7 @@ lotto <- function(numSpins, numbers) {
   cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-lotto(10000000, sample(1:49, 6))
+lotto(1000000, getRandom(1, 49, 6))
 
 multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
   wins <- 0.0
@@ -88,16 +105,16 @@ multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
   cat(sprintf('\n Oczekiwany wynik wylosowania w Multi Multi, to: %f %% \n', 100*wins/numSpins))
   cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
-multiMulti(20000000, 10000000, sample(1:80, 10), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 9), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 8), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 7), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 6), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 5), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 4), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 3), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 2), FALSE, 2)
-multiMulti(20000000, 10000000, sample(1:80, 1), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 10), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 9), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 8), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 7), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 6), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 5), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 4), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 3), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 2), FALSE, 2)
+multiMulti(2000000, 1000000, getRandom(1, 80, 1), FALSE, 2)
 
 euroJackpot <- function (numSpins, numbers5, numbers2) {
   wins <- 0
@@ -131,7 +148,7 @@ euroJackpot <- function (numSpins, numbers5, numbers2) {
   cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-euroJackpot(10000000, sample(1:50, 5), sample(1:10, 2))
+euroJackpot(1000000, getRandom(1, 50, 5), getRandom(1, 10, 2))
 
 powerball <- function (numSpins, numbers5, numbers) {
   wins <- 0
@@ -163,4 +180,4 @@ powerball <- function (numSpins, numbers5, numbers) {
   cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-powerball(10000000, sample(1:69, 5), sample(1:26, 1))
+powerball(1000000, getRandom(1, 69, 5), getRandom(1, 26, 1))
