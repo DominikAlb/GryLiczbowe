@@ -8,28 +8,24 @@ options(warn=-1)
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
   result <- numeric()
-  while(length(result) != count) {
-    x <- c("https://qrng.anu.edu.au/API/jsonI.php?length=",255,"&type=uint8")
-    x <- paste(x, collapse = "")
-    res <- fromJSON(x)
-    arr <- res[['data']]
-    arr <- append(arr, result)
-    arr <- arr[!duplicated(arr)]
-    temp <- numeric()
-    for (i in arr) {
-      if (i >= min && i <= max) {
-        temp <- append(temp, i)
-      }
-      if (length(temp) == count) {
-        break
-      }
+  x <- c("https://qrng.anu.edu.au/API/jsonI.php?length=",255,"&type=uint8")
+  x <- paste(x, collapse = "")
+  res <- fromJSON(x)
+  arr <- res[['data']] %% max+1
+  arr <- append(arr, result)
+  arr <- arr[!duplicated(arr)]
+  for (i in arr) {
+    if (i >= min && i <= max) {
+      result <- append(result, i)
     }
-    result <- temp
+    if (length(result) == count) {
+      break
+    }
   }
   return(result)
 }
-
-getRandom(0, 36, 30)
+#pobiera 30 losowych liczb z zakresu [0, 36]
+#getRandom(0, 36, 30)
 
 euroRoulette <- function(budget, numSpins, number, bet) {
   startedBudget <- budget
@@ -45,40 +41,49 @@ euroRoulette <- function(budget, numSpins, number, bet) {
       budget <- budget - bet
     }
   }
-  cat(sprintf("Oczekiwany wynik wylosowania w ruletce: %i , to: %.10f %% \n", number, (100*wins/numSpins)))
-  cat(sprintf("wygrana wynosi %i \n", budget - startedBudget))
-  cat(sprintf('liczba wygranych: %i \n\n', wins))
+  #cat(sprintf("Oczekiwany wynik wylosowania w ruletce: %i , to: %.10f %% \n", number, (100*wins/numSpins)))
+  #cat(sprintf("wygrana wynosi %i \n", budget - startedBudget))
+  #cat(sprintf('liczba wygranych: %i \n\n', wins))
+
+  return((budget - startedBudget)/startedBudget)
 }
 
-euroRoulette(1000000,1000000, sample(0:36,1), 1)
-euroRoulette(1000000,1000000, getRandom(0, 36,1), 1)
+arr <- replicate(100, euroRoulette(1000000,1000000, getRandom(0, 36,1), 1))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla ruletki to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
 
 lotto <- function(numSpins, numbers) {
   wins <- 0
   for (i in 1:numSpins) {
-    counter <- 0
+    count <- 0
     outcome <- sample(1:49, 6)
 
     for (i in 1:6) {
       if (!is.na(match(numbers[i], outcome))) {
-        counter <- counter + 1
+        count <- count + 1
       }
     }
 
-    if (counter == 6) {
+    if (count == 6) {
       wins <- wins + 1
     }
   }
 
-  cat(sprintf('Losowane liczby: '))
-  for (i in numbers) {
-    cat(sprintf('%i ', i))
-  }
-  cat(sprintf('\n Oczekiwany wynik wylosowania w lotto, to: %f %% \n', 100*wins/numSpins))
-  cat(sprintf('liczba wygranych: %i \n\n', wins))
+  #cat(sprintf('Losowane liczby: '))
+  #for (i in numbers) {
+  #  cat(sprintf('%i ', i))
+  #}
+  #cat(sprintf('\n Oczekiwany wynik wylosowania w lotto, to: %f %% \n', 100*wins/numSpins))
+  #cat(sprintf('liczba wygranych: %i \n\n', wins))
+
+  return(wins/numSpins)
 }
 
-lotto(1000000, getRandom(1, 49, 6))
+arr <- replicate(100, lotto(1000000, getRandom(1, 49, 6)))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla lotto to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
 
 multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
   wins <- 0.0
@@ -98,23 +103,31 @@ multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
     }
 
   }
-  cat(sprintf('Losowane liczby: '))
-  for (i in numbers) {
-    cat(sprintf('%i ', i))
-  }
-  cat(sprintf('\n Oczekiwany wynik wylosowania w Multi Multi, to: %f %% \n', 100*wins/numSpins))
-  cat(sprintf('liczba wygranych: %i \n\n', wins))
+  #cat(sprintf('Losowane liczby: '))
+  #for (i in numbers) {
+  #  cat(sprintf('%i ', i))
+  #}
+  #cat(sprintf('\n Oczekiwany wynik wylosowania w Multi Multi, to: %f %% \n', 100*wins/numSpins))
+  #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
-multiMulti(2000000, 1000000, getRandom(1, 80, 10), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 9), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 8), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 7), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 6), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 5), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 4), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 3), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 2), FALSE, 2)
-multiMulti(2000000, 1000000, getRandom(1, 80, 1), FALSE, 2)
+
+arr <- replicate(100, multiMulti(2000000, 1000000, getRandom(1, 80, 10), FALSE, 2))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla multi multi 10 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+
+
+arr <- replicate(100, multiMulti(2000000, 1000000, getRandom(1, 80, 5), FALSE, 2))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla multi multi 5 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+
+
+
+arr <- replicate(100, multiMulti(2000000, 1000000, getRandom(1, 80, 1), FALSE, 2))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla multi multi 1 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
 
 euroJackpot <- function (numSpins, numbers5, numbers2) {
   wins <- 0
@@ -136,19 +149,22 @@ euroJackpot <- function (numSpins, numbers5, numbers2) {
       wins <- wins + 1
     }
   }
-  cat(sprintf('Losowane liczby: '))
-  for (i in numbers5) {
-    cat(sprintf('%i ', i))
-  }
-  cat(sprintf(' i '))
-  for (i in numbers2) {
-    cat(sprintf('%i ', i))
-  }
-  cat(sprintf('\n Oczekiwany wynik wylosowania w EuroJackpot, to: %f %% \n', 100*wins/numSpins))
-  cat(sprintf('liczba wygranych: %i \n\n', wins))
+  #cat(sprintf('Losowane liczby: '))
+  #for (i in numbers5) {
+  #  cat(sprintf('%i ', i))
+  #}
+  #cat(sprintf(' i '))
+  #for (i in numbers2) {
+  #  cat(sprintf('%i ', i))
+  #}
+  #cat(sprintf('\n Oczekiwany wynik wylosowania w EuroJackpot, to: %f %% \n', 100*wins/numSpins))
+  #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-euroJackpot(1000000, getRandom(1, 50, 5), getRandom(1, 10, 2))
+arr <- replicate(100, euroJackpot(1000000, getRandom(1, 50, 5), getRandom(1, 10, 2)))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla euroJackpot to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
 
 powerball <- function (numSpins, numbers5, numbers) {
   wins <- 0
@@ -168,16 +184,19 @@ powerball <- function (numSpins, numbers5, numbers) {
       wins <- wins + 1
     }
   }
-  cat(sprintf('Losowane liczby: '))
-  for (i in numbers5) {
-    cat(sprintf('%i ', i))
-  }
-  cat(sprintf(' i '))
-  for (i in numbers) {
-    cat(sprintf('%i ', i))
-  }
-  cat(sprintf('\n Oczekiwany wynik wylosowania w PowerBall, to: %f %% \n', 100*wins/numSpins))
-  cat(sprintf('liczba wygranych: %i \n\n', wins))
+  #cat(sprintf('Losowane liczby: '))
+  #for (i in numbers5) {
+  #  cat(sprintf('%i ', i))
+  #}
+  #cat(sprintf(' i '))
+  #for (i in numbers) {
+  #  cat(sprintf('%i ', i))
+  #}
+  #cat(sprintf('\n Oczekiwany wynik wylosowania w PowerBall, to: %f %% \n', 100*wins/numSpins))
+  #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-powerball(1000000, getRandom(1, 69, 5), getRandom(1, 26, 1))
+arr <- replicate(100, powerball(1000000, getRandom(1, 69, 5), getRandom(1, 26, 1)))
+sd <- sd(arr)
+mean <- mean(arr)
+cat(sprintf('Oczekiwany rezultat dla powerball to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
