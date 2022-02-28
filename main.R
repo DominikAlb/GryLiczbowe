@@ -5,7 +5,8 @@ library(RJSONIO)
 
 options(warn=-1)
 #dlugosc gry
-N <- 10000
+N <- 10000000
+cat(sprintf("N: %f", N), file = "out.txt", sep = "\n")
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
   result <- numeric()
@@ -52,7 +53,7 @@ euroRoulette <- function(budget, numSpins, number, bet) {
 arr <- replicate(100, euroRoulette(N,N, getRandom(0, 36,1), 1))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla ruletki to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla ruletki to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 lotto <- function(numSpins, numbers) {
   wins <- 0
@@ -84,7 +85,7 @@ lotto <- function(numSpins, numbers) {
 arr <- replicate(100, lotto(N, getRandom(1, 49, 6)))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla lotto to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla lotto to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
   wins <- 0.0
@@ -115,20 +116,20 @@ multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
 arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 10), FALSE, 2))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla multi multi 10 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla multi multi 10 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 
 arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 5), FALSE, 2))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla multi multi 5 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla multi multi 5 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 
 
 arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 1), FALSE, 2))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla multi multi 1 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla multi multi 1 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 euroJackpot <- function (numSpins, numbers5, numbers2) {
   wins <- 0
@@ -165,7 +166,7 @@ euroJackpot <- function (numSpins, numbers5, numbers2) {
 arr <- replicate(100, euroJackpot(N, getRandom(1, 50, 5), getRandom(1, 10, 2)))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla euroJackpot to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla euroJackpot to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 powerball <- function (numSpins, numbers5, numbers) {
   wins <- 0
@@ -200,4 +201,4 @@ powerball <- function (numSpins, numbers5, numbers) {
 arr <- replicate(100, powerball(N, getRandom(1, 69, 5), getRandom(1, 26, 1)))
 sd <- sd(arr)
 mean <- mean(arr)
-cat(sprintf('Oczekiwany rezultat dla powerball to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
+cat(sprintf('Oczekiwany rezultat dla powerball to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
