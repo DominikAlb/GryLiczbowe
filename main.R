@@ -5,7 +5,7 @@ library(RJSONIO)
 
 options(warn=-1)
 #dlugosc gry
-N <- 10000000
+N <- 10000
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
   result <- numeric()
