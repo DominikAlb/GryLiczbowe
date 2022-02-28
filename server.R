@@ -1,5 +1,8 @@
 # example from http://shiny.rstudio.com/gallery/kmeans-example.html
-
+library(httr)
+library(jsonlite)
+library("rjson")
+library(RJSONIO)
 library(shiny)
 
 options(warn=-1)
