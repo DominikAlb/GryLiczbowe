@@ -1,3 +1,8 @@
+library(httr)
+library(jsonlite)
+library("rjson")
+library(RJSONIO)
+
 options(warn=-1)
 #dlugosc gry
 N <- 10000000
