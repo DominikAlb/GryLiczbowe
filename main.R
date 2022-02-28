@@ -1,10 +1,6 @@
-library(httr)
-library(jsonlite)
-library("rjson")
-library(RJSONIO)
-
 options(warn=-1)
-
+#dlugosc gry
+N <- 10000000
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
   result <- numeric()
@@ -48,7 +44,7 @@ euroRoulette <- function(budget, numSpins, number, bet) {
   return((budget - startedBudget)/startedBudget)
 }
 
-arr <- replicate(100, euroRoulette(1000000,1000000, getRandom(0, 36,1), 1))
+arr <- replicate(100, euroRoulette(N,N, getRandom(0, 36,1), 1))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla ruletki to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
@@ -80,7 +76,7 @@ lotto <- function(numSpins, numbers) {
   return(wins/numSpins)
 }
 
-arr <- replicate(100, lotto(1000000, getRandom(1, 49, 6)))
+arr <- replicate(100, lotto(N, getRandom(1, 49, 6)))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla lotto to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
@@ -111,20 +107,20 @@ multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-arr <- replicate(100, multiMulti(2000000, 1000000, getRandom(1, 80, 10), FALSE, 2))
+arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 10), FALSE, 2))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla multi multi 10 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
 
 
-arr <- replicate(100, multiMulti(2000000, 1000000, getRandom(1, 80, 5), FALSE, 2))
+arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 5), FALSE, 2))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla multi multi 5 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
 
 
 
-arr <- replicate(100, multiMulti(2000000, 1000000, getRandom(1, 80, 1), FALSE, 2))
+arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 1), FALSE, 2))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla multi multi 1 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
@@ -161,7 +157,7 @@ euroJackpot <- function (numSpins, numbers5, numbers2) {
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-arr <- replicate(100, euroJackpot(1000000, getRandom(1, 50, 5), getRandom(1, 10, 2)))
+arr <- replicate(100, euroJackpot(N, getRandom(1, 50, 5), getRandom(1, 10, 2)))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla euroJackpot to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
@@ -196,7 +192,7 @@ powerball <- function (numSpins, numbers5, numbers) {
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-arr <- replicate(100, powerball(1000000, getRandom(1, 69, 5), getRandom(1, 26, 1)))
+arr <- replicate(100, powerball(N, getRandom(1, 69, 5), getRandom(1, 26, 1)))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla powerball to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)))
