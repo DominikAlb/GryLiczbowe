@@ -3,9 +3,9 @@ library(jsonlite)
 library("rjson")
 library(RJSONIO)
 
-options(warn=-1)
+
 #dlugosc gry
-N <- 10000000
+N <- 100000.0
 cat(sprintf("N: %f", N), file = "out.txt", sep = "\n")
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
@@ -87,11 +87,11 @@ sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla lotto to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
-multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
+multiMulti <- function(budget, numSpins, numbers) {
   wins <- 0.0
   for (i in 1:numSpins) {
     if (budget <= 0) break
-    ifelse (plus, budget <- budget - ticketCost, budget <- budget - ticketCost * 2)
+    else { budget <- budget - 1 }
     counter <- 0
     outcome <- sample(1:80, 20)
 
@@ -113,20 +113,20 @@ multiMulti <- function(budget, numSpins, numbers, plus, ticketCost) {
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
 }
 
-arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 10), FALSE, 2))
+arr <- replicate(100, multiMulti(N, N, getRandom(1, 80, 10)))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla multi multi 10 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 
-arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 5), FALSE, 2))
+arr <- replicate(100, multiMulti(N, N, getRandom(1, 80, 5)))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla multi multi 5 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
 
 
 
-arr <- replicate(100, multiMulti(N*2, N, getRandom(1, 80, 1), FALSE, 2))
+arr <- replicate(100, multiMulti(N, N, getRandom(1, 80, 1)))
 sd <- sd(arr)
 mean <- mean(arr)
 cat(sprintf('Oczekiwany rezultat dla multi multi 1 z 10 to: %.3f %% +/- %.3f %% z 95%% pewnoscia\n\n', round(100*mean, 3), round(100*1.96*sd, 3)), file = "out.txt", append = TRUE)
