@@ -6,7 +6,7 @@ library(lgr)
 
 
 #dlugosc gry
-N <- 1000.0
+N <- 1000000.0
 lgr$info("N: %f", N)
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
