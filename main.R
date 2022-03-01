@@ -5,7 +5,7 @@ library(RJSONIO)
 
 
 #dlugosc gry
-N <- 100000.0
+N <- 1000.0
 cat(sprintf("N: %f", N), file = "out.txt", sep = "\n")
 #Pobiera tablice losowych liczb do testu
 getRandom <- function (min, max, count) {
@@ -89,14 +89,14 @@ cat(sprintf('Oczekiwany rezultat dla lotto to: %.3f %% +/- %.3f %% z 95%% pewnos
 
 multiMulti <- function(budget, numSpins, numbers) {
   wins <- 0.0
-  for (i in 1:numSpins) {
+  for (x in 1:numSpins) {
     if (budget <= 0) break
     else { budget <- budget - 1 }
     counter <- 0
     outcome <- sample(1:80, 20)
 
-    for (i in 1:numbers) {
-      if (!is.na(match(numbers[i], outcome))) {
+    for (y in seq_along(numbers)) {
+      if (!is.na(match(numbers[y], outcome))) {
         counter <- counter + 1
       }
     }
