@@ -1,4 +1,4 @@
-my_packages <- c("httr", "jsonlite", "rjson", "RJSONIO", "shiny")
+my_packages <- c("httr", "jsonlite", "rjson", "RJSONIO", "shiny", "lgr")
 install_if_missing <- function(p) {
   if(p %in% rownames(installed.packages())==FALSE){
     install.packages(p)}
