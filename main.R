@@ -111,6 +111,8 @@ multiMulti <- function(budget, numSpins, numbers) {
   #}
   #cat(sprintf('\n Oczekiwany wynik wylosowania w Multi Multi, to: %f %% \n', 100*wins/numSpins))
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
+
+  return(wins/numSpins)
 }
 
 arr <- replicate(100, multiMulti(N, N, getRandom(1, 80, 10)))
@@ -161,6 +163,7 @@ euroJackpot <- function (numSpins, numbers5, numbers2) {
   #}
   #cat(sprintf('\n Oczekiwany wynik wylosowania w EuroJackpot, to: %f %% \n', 100*wins/numSpins))
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
+  return(wins/numSpins)
 }
 
 arr <- replicate(100, euroJackpot(N, getRandom(1, 50, 5), getRandom(1, 10, 2)))
@@ -196,6 +199,7 @@ powerball <- function (numSpins, numbers5, numbers) {
   #}
   #cat(sprintf('\n Oczekiwany wynik wylosowania w PowerBall, to: %f %% \n', 100*wins/numSpins))
   #cat(sprintf('liczba wygranych: %i \n\n', wins))
+  return(wins/numSpins)
 }
 
 arr <- replicate(100, powerball(N, getRandom(1, 69, 5), getRandom(1, 26, 1)))
